@@ -20,14 +20,14 @@ http.createServer(function (request, response) {
   myRouter(request, response, finalHandler(request, response))
 }).listen(3001, () => {
   // Load dummy data into server memory for serving
-  goals = JSON.parse(fs.readFileSync("goals.json","utf-8"));
+  goals = JSON.parse(fs.readFileSync("../goals.json","utf-8"));
   
   // Load all users into users array and for now hardcode the first user to be "logged in"
-  users = JSON.parse(fs.readFileSync("users.json","utf-8"));
+  users = JSON.parse(fs.readFileSync("../users.json","utf-8"));
   user = users[0];
   
   // Load all categories from file
-  categories = JSON.parse(fs.readFileSync("categories.json","utf-8"));
+  categories = JSON.parse(fs.readFileSync("../categories.json","utf-8"));
 });
 
 // Notice how much cleaner these endpoint handlers are...
@@ -36,10 +36,19 @@ myRouter.get('/v1/goals', function(request,response) {
   const queryParams = queryString.parse(url.parse(request.url).query)
 
   // TODO: Do something with the query params
-
+  console.log(queryParams);
   // Return all our current goal definitions (for now)
   return response.end(JSON.stringify(goals));
 });
+
+// get /me
+myRouter.get('/v1/me', (request, responst) => {});
+
+// get /categories
+myRouter.get('/v1/categories', (request, responst) => {});
+
+// get /categories/{id}/goals
+myRouter.get('/v1/categories/:catId/goals', (request, responst) => {});
 
 // See how i'm not having to build up the raw data in the body... body parser just gives me the whole thing as an object.
 // See how the router automatically handled the path value and extracted the value for me to use?  How nice!
@@ -73,3 +82,13 @@ myRouter.post('/v1/me/goals/:goalId/challenge/:userId', function(request,respons
   // No response needed other than a 200 success
   return response.end();
 });
+
+
+//post /me/goals/{id}/achieve
+myRouter.post('/v1/me/goals/:goalId/achieve', (request, responst) => {});
+
+//post /me/goals/{id}/challenge/{userId}
+myRouter.post('/v1/me/goals/:goalId/challenge', (request, responst) => {});
+
+//post me/goals/{id}/gift/{userId}
+myRouter.post('/v1/me/goals/:goalId/gift/:userId', (request, responst) => {});
